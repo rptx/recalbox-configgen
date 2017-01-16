@@ -62,6 +62,7 @@ emulators["megadrive"] = Emulator(name='megadrive', emulator='libretro', core='p
 emulators["gamegear"] = Emulator(name='gamegear', emulator='libretro', core='genesisplusgx')
 emulators["sega32x"] = Emulator(name='sega32x', emulator='libretro', core='picodrive')
 emulators["segacd"] = Emulator(name='segacd', emulator='libretro', core='picodrive')
+emulators["saturn"] = Emulator(name='saturn', emulator='libretro', core='yabause')
 emulators["dreamcast"] = Emulator(name='dreamcast', emulator='reicast')
 # Arcade
 emulators["neogeo"] = Emulator(name='neogeo', emulator='fba2x')
