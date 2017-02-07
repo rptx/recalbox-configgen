@@ -5,8 +5,9 @@ esSettings = '/recalbox/share/system/.emulationstation/es_settings.cfg'
 recalboxConf = '/recalbox/share/system/recalbox.conf'
 
 retroarchRoot = '/recalbox/share/system/configs/retroarch'
+retroarchRootInit = '/recalbox/share_init/system/configs/retroarch'
 retroarchCustom = retroarchRoot + '/retroarchcustom.cfg'
-retroarchCustomOrigin = retroarchRoot + "/retroarchcustom.cfg.origin"
+retroarchCustomOrigin = retroarchRootInit + "/retroarchcustom.cfg"
 retroarchCoreCustom = retroarchRoot + "/cores/retroarch-core-options.cfg"
 
 retroarchBin = "retroarch"

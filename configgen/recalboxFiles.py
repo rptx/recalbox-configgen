@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 HOME_INIT = '/recalbox/share_init/system/'
 HOME = '/recalbox/share/system'
+CONF_INIT = HOME_INIT + '/configs'
 CONF = HOME + '/configs'
 SAVES = '/recalbox/share/saves'
 SCREENSHOTS = '/recalbox/share/screenshots'
@@ -30,8 +31,9 @@ recalboxBins = {'dosbox'      : '/usr/bin/dosbox'
 
 
 retroarchRoot = CONF + '/retroarch'
+retroarchRootInit = CONF_INIT + '/retroarch'
 retroarchCustom = retroarchRoot + '/retroarchcustom.cfg'
-retroarchCustomOrigin = retroarchRoot + "/retroarchcustom.cfg.origin"
+retroarchCustomOrigin = retroarchRootInit + "/retroarchcustom.cfg"
 retroarchCoreCustom = retroarchRoot + "/cores/retroarch-core-options.cfg"
 
 retroarchCores = "/usr/lib/libretro/"
