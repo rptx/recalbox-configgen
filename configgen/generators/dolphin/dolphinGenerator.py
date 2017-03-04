@@ -21,7 +21,7 @@ class DolphinGenerator(Generator):
             dolphinSettings.save("ShowLag", "False")
             dolphinSettings.save("ShowFrameCount", "False")
 
-        commandArray = [recalboxFiles.recalboxBins[system.config['emulator']], "-e", rom]
+        commandArray = [recalboxFiles.recalboxBins[system.config['emulator']], "-e", rom, "--confirm=False"]
         if 'args' in system.config and system.config['args'] is not None:
              commandArray.extend(system.config['args'])
         return Command.Command(videomode=system.config['videomode'], array=commandArray, env={"XDG_CONFIG_HOME":recalboxFiles.CONF, "XDG_DATA_HOME":recalboxFiles.SAVES})

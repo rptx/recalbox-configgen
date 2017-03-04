@@ -25,7 +25,7 @@ recalboxBins = {'dosbox'      : '/usr/bin/dosbox'
               , 'reicast'     : '/usr/bin/reicast.elf'
               , 'scummvm'     : '/usr/bin/scummvm'
               , 'vice'        : '/usr/bin/x64'
-              , 'dolphin'     : '/usr/bin/dolphin-emu-nogui'
+              , 'dolphin'     : '/usr/bin/dolphin-emu'
               , 'advancemame' : '/usr/bin/advmame'
 }
 

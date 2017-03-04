@@ -5,6 +5,7 @@ import recalboxFiles
 
 # Create the controller configuration file
 def generateControllerConfig(system, playersControllers):
+    generateHotkeys(playersControllers)
     if system.name == "wii":
         if 'emulatedwiimotes' in system.config and system.config['emulatedwiimotes'] == '1':
             generateControllerConfig_emulatedwiimotes(playersControllers)
@@ -66,6 +67,54 @@ def generateControllerConfig_realwiimotes(filename, anyDefKey):
     f.write
     f.close()
 
+def generateHotkeys(playersControllers):
+    configFileName = "{}/{}".format(recalboxFiles.dolphinConfig, "Hotkeys.ini")
+    f = open(configFileName, "w")
+
+    hotkeysMapping = {
+        'a':  'Keys/Reset',                      'b': 'Keys/Toggle Pause',
+        'x':  'Keys/Load from selected slot',    'y': 'Keys/Save to selected slot',
+        'r2': None,                          'start': 'Keys/Exit',
+        'pageup': 'Keys/Take Screenshot', 'pagedown': 'Keys/Toggle 3D Side-by-side',
+        'up': 'Keys/Select State Slot 1', 'down': 'Keys/Select State Slot 2', 'left': None, 'right': None,
+        'joystick1up': None, 'joystick1left': None,
+        'joystick2up': None,    'joystick2left': None
+    }
+
+    nplayer = 1
+    for playercontroller in playersControllers:
+        if nplayer == 1:
+            pad = playersControllers[playercontroller]
+            f.write("[Hotkeys1]" + "\n")
+            f.write("Device = evdev/0/" + pad.configName + "\n")
+
+            # search the hotkey button
+            hotkey = None
+            if "hotkey" not in pad.inputs:
+                return
+            hotkey = pad.inputs["hotkey"]
+            if hotkey.type != "button":
+                return
+
+            for x in pad.inputs:
+                print
+                input = pad.inputs[x]
+
+                keyname = None
+                if input.name in hotkeysMapping:
+                    keyname = hotkeysMapping[input.name]
+
+                # write the configuration for this key
+                if keyname is not None:
+                    write_key(f, keyname, input.type, input.id, input.value, pad.nbaxes, False, hotkey.id)
+                #else:
+                #    f.write("# undefined key: name="+input.name+", type="+input.type+", id="+str(input.id)+", value="+str(input.value)+"\n")
+
+        nplayer += 1
+
+    f.write
+    f.close()
+
 def generateControllerConfig_any(playersControllers, filename, anyDefKey, anyMapping, anyReverseAxes):
     configFileName = "{}/{}".format(recalboxFiles.dolphinConfig, filename)
     f = open(configFileName, "w")
@@ -98,17 +147,20 @@ def generateControllerConfig_any(playersControllers, filename, anyDefKey, anyMap
 
             # write the configuration for this key
             if keyname is not None:
-                write_key(f, keyname, input.type, input.id, input.value, pad.nbaxes, False)
+                write_key(f, keyname, input.type, input.id, input.value, pad.nbaxes, False, None)
             # write the 2nd part
             if input.name in { "joystick1up", "joystick1left", "joystick2up", "joystick2left"} and keyname is not None:
-                write_key(f, anyReverseAxes[keyname], input.type, input.id, input.value, pad.nbaxes, True)
+                write_key(f, anyReverseAxes[keyname], input.type, input.id, input.value, pad.nbaxes, True, None)
 
         nplayer += 1
     f.write
     f.close()
 
-def write_key(f, keyname, input_type, input_id, input_value, input_global_id, reverse):
-    f.write(keyname + " = `")
+def write_key(f, keyname, input_type, input_id, input_value, input_global_id, reverse, hotkey_id):
+    f.write(keyname + " = ")
+    if hotkey_id is not None:
+        f.write("`Button " + str(hotkey_id) + "` & ")
+    f.write("`")
     if input_type == "button":
         f.write("Button " + str(input_id))
     elif input_type == "hat":
