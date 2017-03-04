@@ -21,6 +21,9 @@ class DolphinGenerator(Generator):
             dolphinSettings.save("ShowLag", "False")
             dolphinSettings.save("ShowFrameCount", "False")
 
+        # don't ask about statistics
+        dolphinSettings.save("PermissionAsked", "True")
+
         commandArray = [recalboxFiles.recalboxBins[system.config['emulator']], "-e", rom, "--confirm=False"]
         if 'args' in system.config and system.config['args'] is not None:
              commandArray.extend(system.config['args'])
