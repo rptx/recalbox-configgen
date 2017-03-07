@@ -86,7 +86,7 @@ def generateHotkeys(playersControllers):
         if nplayer == 1:
             pad = playersControllers[playercontroller]
             f.write("[Hotkeys1]" + "\n")
-            f.write("Device = evdev/0/" + pad.configName + "\n")
+            f.write("Device = evdev/0/" + pad.realName + "\n")
 
             # search the hotkey button
             hotkey = None
@@ -134,7 +134,7 @@ def generateControllerConfig_any(playersControllers, filename, anyDefKey, anyMap
         double_pads[pad.configName] = nsamepad+1
 
         f.write("[" + anyDefKey + str(nplayer) + "]" + "\n")
-        f.write("Device = evdev/" + str(nsamepad) + "/" + pad.configName + "\n")
+        f.write("Device = evdev/" + str(nsamepad) + "/" + pad.realName + "\n")
 
         for x in pad.inputs:
             input = pad.inputs[x]
