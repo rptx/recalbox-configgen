@@ -103,6 +103,7 @@ emulators["cavestory"] = Emulator(name='cavestory', emulator='libretro', core='n
 emulators["imageviewer"] = Emulator(name='imageviewer', emulator='libretro', core='imageviewer')
 emulators["scummvm"] = Emulator(name='scummvm', emulator='scummvm', videomode='default')
 emulators["colecovision"] = Emulator(name='colecovision', emulator='libretro', core='bluemsx')
+emulators["jaguar"] = Emulator(name='jaguar', emulator='libretro', core='virtualjaguar')
 
 emulators["kodi"] = Emulator(name='kodi', emulator='kodi', videomode='default')
 emulators["moonlight"] = Emulator(name='moonlight', emulator='moonlight')
