@@ -83,6 +83,7 @@ dolphinIni     = dolphinConfig + '/Dolphin.ini'
 dolphinSYSCONF = dolphinData + "/Wii/shared2/sys/SYSCONF"
 
 ppssppConf = CONF + '/ppsspp/PSP/SYSTEM'
+ppssppControlsIni = ppssppConf + '/controls.ini'
 ppssppControls = CONF + '/ppsspp/gamecontrollerdb.txt'
 ppssppControlsInit = HOME_INIT + 'configs/ppsspp/PSP/SYSTEM/controls.ini'
 ppssppConfig = ppssppConf + '/ppsspp.ini'
