@@ -3,6 +3,7 @@ import Command
 import recalboxFiles
 from generators.Generator import Generator
 import dolphinControllers
+import dolphinSYSCONF
 import shutil
 import os.path
 import ConfigParser
@@ -26,6 +27,12 @@ class DolphinGenerator(Generator):
 
         # don't confirm at stop
         dolphinSettings.save("ConfirmStop", "False")
+
+        # update SYSCONF
+        try:
+            dolphinSYSCONF.update(recalboxFiles.dolphinSYSCONF)
+        except Exception:
+            pass # don't fail in case of SYSCONF update
 
         commandArray = [recalboxFiles.recalboxBins[system.config['emulator']], "-e", rom]
         if 'args' in system.config and system.config['args'] is not None:

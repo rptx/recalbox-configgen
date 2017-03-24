@@ -77,9 +77,10 @@ reicastConfigInit = HOME_INIT + 'configs/reicast/emu.cfg'
 reicastSaves = SAVES
 reicastBios = BIOS
 
-dolphinConfig = CONF + "/dolphin-emu"
-dolphinData   = SAVES + "/dolphin-emu"
-dolphinIni    = dolphinConfig + '/Dolphin.ini'
+dolphinConfig  = CONF + "/dolphin-emu"
+dolphinData    = SAVES + "/dolphin-emu"
+dolphinIni     = dolphinConfig + '/Dolphin.ini'
+dolphinSYSCONF = dolphinData + "/Wii/shared2/sys/SYSCONF"
 
 ppssppConf = CONF + '/ppsspp/PSP/SYSTEM'
 ppssppControls = CONF + '/ppsspp/gamecontrollerdb.txt'
