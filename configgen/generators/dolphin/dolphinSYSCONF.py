@@ -102,8 +102,15 @@ def getWiiLangFromEnvironment():
     else:
         return availableLanguages["en_US"]
 
-def update(filepath):
-    arg_setval = { "IPL.LNG": getWiiLangFromEnvironment() }
+def getRatioFromConfig(config):
+    # 0: 4:3 ; 1: 16:9
+    if "ratio" in config:
+        if config["ratio"] == "4/3":
+            return 0
+    return 1
+
+def update(config, filepath):
+    arg_setval = { "IPL.LNG": getWiiLangFromEnvironment(), "IPL.AR": getRatioFromConfig(config) }
     readWriteFile(filepath, arg_setval)
 
 if __name__ == '__main__':

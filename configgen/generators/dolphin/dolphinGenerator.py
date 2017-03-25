@@ -30,7 +30,7 @@ class DolphinGenerator(Generator):
 
         # update SYSCONF
         try:
-            dolphinSYSCONF.update(recalboxFiles.dolphinSYSCONF)
+            dolphinSYSCONF.update(system.config, recalboxFiles.dolphinSYSCONF)
         except Exception:
             pass # don't fail in case of SYSCONF update
 
