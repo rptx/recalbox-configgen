@@ -6,8 +6,20 @@ import dolphinControllers
 import dolphinSYSCONF
 import shutil
 import os.path
+from os import environ
 import ConfigParser
 from settings.unixSettings import UnixSettings
+
+# seem to be only for the gamecube. However, while this is not in a gamecube section
+# it may be used for something else, so set it anyway
+
+def getDolphinLangFromEnvironment():
+    lang = environ['LANG'][:5]
+    availableLanguages = { "en_US": 0, "de_DE": 1, "fr_FR": 2, "es_ES": 3, "it_IT": 4, "nl_NL": 5 }
+    if lang in availableLanguages:
+        return availableLanguages[lang]
+    else:
+        return availableLanguages["en_US"]
 
 class DolphinGenerator(Generator):
     def generate(self, system, rom, playersControllers):
@@ -27,6 +39,9 @@ class DolphinGenerator(Generator):
 
         # don't confirm at stop
         dolphinSettings.save("ConfirmStop", "False")
+
+        # language (for gamecube at least)
+        dolphinSettings.save("SelectedLanguage", getDolphinLangFromEnvironment())
 
         # update SYSCONF
         try:
