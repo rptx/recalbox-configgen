@@ -13,7 +13,10 @@ def writeMupenConfig(system, controllers):
 	writeHotKeyConfig(controllers)
 	if system.config['videomode'] != 'default':
 		group, mode, drive = system.config['videomode'].split()
-		setRealResolution(group, mode, drive)
+                try:
+		        setRealResolution(group, mode, drive)
+                except Exception:
+                        pass # don't fail
 	
 	#Draw or not FPS
 	if system.config['showFPS'] == 'true':
@@ -58,11 +61,11 @@ def setRealResolution(group, mode, drive):
 	# Use tvservice to get the real resolution
 	groups = ['CEA', 'DMT']
 	if group not in groups:
-		sys.exit("{} is an unknown group. Can't switch to {} {} {}".format(group, group, mode, drive))
+                raise Exception("{} is an unknown group. Can't switch to {} {} {}".format(group, group, mode, drive))
 		
 	drives = ['HDMI', 'DVI']
 	if drive not in drives:
-		sys.exit("{} is an unknown drive. Can't switch to {} {} {}".format(drive, group, mode, drive))
+                raise Exception("{} is an unknown drive. Can't switch to {} {} {}".format(drive, group, mode, drive))
 		
 	proc = subprocess.Popen(["tvservice -j -m {}".format(group)], stdout=subprocess.PIPE, shell=True)
 	(out, err) = proc.communicate()
@@ -74,9 +77,8 @@ def setRealResolution(group, mode, drive):
 			mupenSettings.save('ScreenWidth', "{}".format(tvmode["width"]))
 			mupenSettings.save('ScreenHeight', "{}".format(tvmode["height"]))
 			return
-			
-	sys.exit("The resolution for '{} {} {}' is not supported by your monitor".format(group, mode, drive))
 
+        raise Exception("The resolution for '{} {} {}' is not supported by your monitor".format(group, mode, drive))
 
 def setPaths():
 	mupenSettings.save('ScreenshotPath', recalboxFiles.SCREENSHOTS)

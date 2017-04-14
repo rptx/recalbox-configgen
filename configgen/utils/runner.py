@@ -13,7 +13,10 @@ def runCommand(command):
     global proc
 
     if command.videomode != 'default':
-        videoMode.setVideoMode(command.videomode)
+        try:
+            videoMode.setVideoMode(command.videomode)
+        except Exception:
+            pass # don't fail
         if command.delay is not None:
             time.sleep(command.delay)
 
@@ -29,6 +32,9 @@ def runCommand(command):
         print("emulator exited")
 
     if command.videomode != 'default':
-        videoMode.setPreffered()
+        try:
+            videoMode.setPreffered()
+        except Exception:
+            pass # don't fail
 
     return exitcode
