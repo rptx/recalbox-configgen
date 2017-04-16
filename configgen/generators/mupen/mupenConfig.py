@@ -11,6 +11,10 @@ mupenSettings = UnixSettings(recalboxFiles.mupenCustom, separator=' ')
 def writeMupenConfig(system, controllers):
 	setPaths()
 	writeHotKeyConfig(controllers)
+
+	# set to default
+        setCurrentResolution()
+
 	if system.config['videomode'] != 'default':
 		group, mode, drive = system.config['videomode'].split()
                 try:
@@ -79,6 +83,16 @@ def setRealResolution(group, mode, drive):
 			return
 
         raise Exception("The resolution for '{} {} {}' is not supported by your monitor".format(group, mode, drive))
+
+def setCurrentResolution():
+        proc = subprocess.Popen(["tvservice.current"], stdout=subprocess.PIPE, shell=True)
+	(out, err) = proc.communicate()
+	tvmodes = json.loads(out)
+	
+	for tvmode in tvmodes:
+		mupenSettings.save('ScreenWidth', "{}".format(tvmode["width"]))
+		mupenSettings.save('ScreenHeight', "{}".format(tvmode["height"]))
+
 
 def setPaths():
 	mupenSettings.save('ScreenshotPath', recalboxFiles.SCREENSHOTS)

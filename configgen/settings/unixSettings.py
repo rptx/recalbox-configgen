@@ -46,6 +46,10 @@ class UnixSettings():
     def disableAll(self, name):
         os.system("sed -i \"s|^.*\({}.*\)|{}\\1|g\" {}".format(name, self.comment, self.settingsFile))
 
+    def remove(self, name):
+        os.system(
+            "sed -i \"\\|^.*\({}{}\?=.*\)|d\" {}".format(name, self.separator, self.settingsFile))
+
     def loadAll(self, name):
         res = dict()
         with open(self.settingsFile) as lines:
