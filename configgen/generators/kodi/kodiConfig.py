@@ -6,7 +6,7 @@ import os
 import recalboxFiles
 from xml.dom import minidom
 
-def getKodiConfig(currentControllers):
+def writeKodiConfigs(currentControllers):
     kodihatspositions    = {1: 'up', 2: 'right', 4: 'down', 8: 'left'}
     kodireversepositions = {'joystick1up': 'joystick1down', 'joystick1left': 'joystick1right', 'joystick2up': 'joystick2down', 'joystick2left': 'joystick2right' }
 
@@ -30,13 +30,23 @@ def getKodiConfig(currentControllers):
         "joystick2right": { "name": "rightstick", "sens": "right" }
     }
 
-    config = minidom.Document()
-    xmlbuttonmap = config.createElement('buttonmap')
-    config.appendChild(xmlbuttonmap)
+    controllersDone = {}
 
     for controller in currentControllers:
         cur = currentControllers[controller]
 
+        # initialized the file
+        kodiJoy = open(recalboxFiles.kodiJoystick.format(cur.guid), "w")
+        config = minidom.Document()
+        xmlbuttonmap = config.createElement('buttonmap')
+        config.appendChild(xmlbuttonmap)
+
+        # skip duplicates
+        if cur.configName in controllersDone:
+            break;
+        else:
+            controllersDone[cur.configName] = True
+        
         nbuttons = 0
         naxis    = int(cur.nbaxes)
         for x in cur.inputs:
@@ -96,7 +106,9 @@ def getKodiConfig(currentControllers):
         for node in sticksNode:
             xmlcontroller.appendChild(sticksNode[node])
         xmldevice.appendChild(xmlcontroller)
-    return config
+        kodiJoy.write(config.toprettyxml())
+        kodiJoy.close()
+
 
 def writeKodiConfig(controllersFromES):
     # if there is no controller, don't remove the current generated one
@@ -107,6 +119,4 @@ def writeKodiConfig(controllersFromES):
     directory = os.path.dirname(recalboxFiles.kodiJoystick)
     if not os.path.exists(directory):
         os.makedirs(directory)
-    kodiJoy = open(recalboxFiles.kodiJoystick, "w")
-    kodiJoy.write(getKodiConfig(controllersFromES).toprettyxml())
-    kodiJoy.close()
+    writeKodiConfigs(controllersFromES)
