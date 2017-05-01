@@ -57,10 +57,7 @@ mupenMappingSystem  = '/recalbox/share_init/system/configs/mupen64/input.xml'
 
 shaderPresetRoot = "/recalbox/share_init/system/configs/shadersets/"
 
-kodiJoystick = HOME + '/.kodi/userdata/keymaps/recalbox.xml'
-kodiMappingUser    = CONF + '/kodi/input.xml'
-kodiMappingSystem  = '/recalbox/share_init/system/configs/kodi/input.xml'
-
+kodiJoystick = HOME + '/.kodi/userdata/addon_data/peripheral.joystick/resources/buttonmaps/xml/linux/batocera.xml'
 
 moonlightCustom = CONF+'/moonlight'
 moonlightConfig = moonlightCustom + '/moonlight.conf'

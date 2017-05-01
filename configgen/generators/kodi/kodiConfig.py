@@ -6,85 +6,96 @@ import os
 import recalboxFiles
 from xml.dom import minidom
 
-def getKodiMappingFile():
-    if os.path.exists(recalboxFiles.kodiMappingUser):
-        return recalboxFiles.kodiMappingUser
-    else:
-        return recalboxFiles.kodiMappingSystem
-
-def getKodiMapping(scope):
-    dom = minidom.parse(getKodiMappingFile())
-    map = dict()
-    for inputs in dom.getElementsByTagName('inputList'):
-        for input in inputs.childNodes:
-            if input.attributes:
-                if input.attributes['scope']:
-                    if input.attributes['scope'].value == scope:
-                        if input.attributes['name']:
-                            if input.attributes['value']:
-                                map[input.attributes['name'].value] = input.attributes['value'].value
-    return map
-
-def getKodiMappingScopes():
-    dom = minidom.parse(getKodiMappingFile())
-    map = dict()
-    for inputs in dom.getElementsByTagName('inputList'):
-        for input in inputs.childNodes:
-            if input.attributes:
-                if input.attributes['scope']:
-                    map[input.attributes['scope'].value] = True
-    return map
-
 def getKodiConfig(currentControllers):
     kodihatspositions    = {1: 'up', 2: 'right', 4: 'down', 8: 'left'}
     kodireversepositions = {'joystick1up': 'joystick1down', 'joystick1left': 'joystick1right', 'joystick2up': 'joystick2down', 'joystick2left': 'joystick2right' }
-    
-    config = minidom.Document()
-    xmlkeymap = config.createElement('keymap')
-    config.appendChild(xmlkeymap)
 
-    # scopes
-    for scope in getKodiMappingScopes():
-        kodimapping = getKodiMapping(scope)
-        xmlscope = config.createElement(scope)
-        xmlkeymap.appendChild(xmlscope)
-        for controller in currentControllers:
-            cur = currentControllers[controller]
-            xmljoystick = config.createElement('joystick')
-            xmljoystick.attributes["name"] = cur.configName
-            xmlscope.appendChild(xmljoystick)
-            for x in cur.inputs:
-                input = cur.inputs[x]
-                if input.name in kodimapping:
+    kodimapping = {
+        # buttons
+        "a": "y", "b": "a", "x": "b", "y": "x",
+        "hotkey": "guide", "select": "back", "start": "start",
+        "pageup": "leftbumper", "l2": "lefttrigger", "pagedown": "rightbumper", "r2": "righttrigger",
+
+        # hats
+        "up": "up", "down": "down", "left": "left", "right": "right",
+
+        # axes
+        "joystick1up":    { "name": "leftstick",  "sens": "up"    },
+        "joystick1down":  { "name": "leftstick",  "sens": "down"  },
+        "joystick1left":  { "name": "leftstick",  "sens": "left"  },
+        "joystick1right": { "name": "leftstick",  "sens": "right" },
+        "joystick2up":    { "name": "rightstick", "sens": "up"    },
+        "joystick2down":  { "name": "rightstick", "sens": "down"  },
+        "joystick2left":  { "name": "rightstick", "sens": "left"  },
+        "joystick2right": { "name": "rightstick", "sens": "right" }
+    }
+
+    config = minidom.Document()
+    xmlbuttonmap = config.createElement('buttonmap')
+    config.appendChild(xmlbuttonmap)
+
+    for controller in currentControllers:
+        cur = currentControllers[controller]
+
+        nbuttons = 0
+        naxis    = int(cur.nbaxes)
+        for x in cur.inputs:
+            if cur.inputs[x].type == 'button':
+                if int(cur.inputs[x].id) + 1 > nbuttons:
+                    nbuttons = int(cur.inputs[x].id) + 1
+            if cur.inputs[x].type == 'hat' and (cur.inputs[x].value == "1" or cur.inputs[x].value == "8"):
+                naxis += 1
+        xmldevice = config.createElement('device')
+        xmldevice.attributes["name"] = cur.configName
+        xmldevice.attributes["provider"] = "linux"
+        xmldevice.attributes["buttoncount"] = str(nbuttons)
+        xmldevice.attributes["axiscount"] = str(naxis)
+        xmlbuttonmap.appendChild(xmldevice)
+        xmlcontroller = config.createElement('controller')
+        xmlcontroller.attributes["id"] = "game.controller.default"
+
+        sticksNode = {}
+        
+        for x in cur.inputs:
+            input = cur.inputs[x]
+            if input.name in kodimapping:
                     if input.type == 'button':
-                        xmlbutton = config.createElement('button')
-                        xmlbutton.attributes["id"] = str(int(input.id)+1) # in kodi, it's sdl +1
-                        action = config.createTextNode(kodimapping[input.name])
-                        xmlbutton.appendChild(action)
-                        xmljoystick.appendChild(xmlbutton)
+                        xmlbutton = config.createElement('feature')
+                        xmlbutton.attributes["name"] = kodimapping[input.name]
+                        xmlbutton.attributes["button"] = str(int(input.id))
+                        xmlcontroller.appendChild(xmlbutton)
+
                     elif input.type == 'hat' and int(input.value) in kodihatspositions:
-                        xmlhat = config.createElement('hat')
-                        xmlhat.attributes["id"] = str(int(input.id) + 1) # in kodi, it's sdl +1
-                        xmlhat.attributes["position"] = kodihatspositions[int(input.value)]
-                        action = config.createTextNode(kodimapping[input.name])
-                        xmlhat.appendChild(action)
-                        xmljoystick.appendChild(xmlhat)
+                        xmlhat = config.createElement('feature')
+                        val = ""
+                        if kodihatspositions[int(input.value)] == "left" or kodihatspositions[int(input.value)] == "right":
+                            val = cur.nbaxes
+                        else:
+                            val = str(int(cur.nbaxes)+1)
+                        if kodihatspositions[int(input.value)] == "down" or kodihatspositions[int(input.value)] == "right":
+                            xmlhat.attributes["axis"] = "+" + val
+                        else:
+                            xmlhat.attributes["axis"] = "-" + val
+                        xmlhat.attributes["name"] = kodihatspositions[int(input.value)]
+                        xmlcontroller.appendChild(xmlhat)
+
                     elif input.type == 'axis':
-                        # dir 1
-                        xmlaxis = config.createElement('axis')
-                        xmlaxis.attributes["id"] = str(int(input.id)+1) # in kodi, it's sdl +1
-                        xmlaxis.attributes["limit"] = input.value
-                        action = config.createTextNode(kodimapping[input.name])
-                        xmlaxis.appendChild(action)
-                        xmljoystick.appendChild(xmlaxis)
-                        # dir 2
-                        if input.name in kodireversepositions and kodireversepositions[input.name] in kodimapping:
-                            xmlaxis = config.createElement('axis')
-                            xmlaxis.attributes["id"] = str(int(input.id)+1) # in kodi, it's sdl +1
-                            xmlaxis.attributes["limit"] = str(-int(input.value))
-                            action = config.createTextNode(kodimapping[kodireversepositions[input.name]])
-                            xmlaxis.appendChild(action)
-                            xmljoystick.appendChild(xmlaxis)
+                        if kodimapping[input.name]["name"] not in sticksNode:
+                            sticksNode[kodimapping[input.name]["name"]] = config.createElement('feature')
+                            sticksNode[kodimapping[input.name]["name"]].attributes["name"] = kodimapping[input.name]["name"]
+                        for sens in [input.name, kodireversepositions[input.name]]:
+                            xmlsens = config.createElement(kodimapping[sens]["sens"])
+                            val = input.id
+                            if (int(input.value) >= 0 and sens == input.name) or (int(input.value) < 0 and sens != input.name):
+                                val =  "+" + val
+                            else:
+                                val =  "-" + val
+                            xmlsens.attributes["axis"] = val
+                            sticksNode[kodimapping[sens]["name"]].appendChild(xmlsens)
+
+        for node in sticksNode:
+            xmlcontroller.appendChild(sticksNode[node])
+        xmldevice.appendChild(xmlcontroller)
     return config
 
 def writeKodiConfig(controllersFromES):
