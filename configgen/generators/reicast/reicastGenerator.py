@@ -7,7 +7,10 @@ import reicastControllers
 import shutil
 import os.path
 import ConfigParser
-
+from shutil import copyfile
+from os.path import dirname
+from os.path import isdir
+from os.path import isfile
 
 class ReicastGenerator(Generator):
     # Main entry of the module
@@ -30,6 +33,26 @@ class ReicastGenerator(Generator):
                 Config.set(section, 'evdev_device_id_' + controller.player, eventNum)
                 # Set the evdev_mapping_X
                 Config.set(section, 'evdev_mapping_' + controller.player, controllerConfigFile)
+
+            # number of players
+            Config.set("players", 'nb', len(playersControllers))
+
+            # internal config
+            # nvmem
+            if not isfile(recalboxFiles.reicastNvmemUser):
+                if not isdir(dirname(recalboxFiles.reicastNvmemUser)):
+                    os.mkdir(dirname(recalboxFiles.reicastNvmemUser))
+                copyfile(recalboxFiles.reicastNvmemBlank, recalboxFiles.reicastNvmemUser)
+            # vmuA1
+            if not isfile(recalboxFiles.reicastVMUA1):
+                if not isdir(dirname(recalboxFiles.reicastVMUA1)):
+                    os.mkdir(dirname(recalboxFiles.reicastVMUA1))
+                copyfile(recalboxFiles.reicastVMUBlank, recalboxFiles.reicastVMUA1)
+            # vmuA2
+            if not isfile(recalboxFiles.reicastVMUA2):
+                if not isdir(dirname(recalboxFiles.reicastVMUA2)):
+                    os.mkdir(dirname(recalboxFiles.reicastVMUA2))
+                copyfile(recalboxFiles.reicastVMUBlank, recalboxFiles.reicastVMUA2)
 
             cfgfile = open(recalboxFiles.reicastConfig,'w+')
             Config.write(cfgfile)
