@@ -38,11 +38,6 @@ class ReicastGenerator(Generator):
             Config.set("players", 'nb', len(playersControllers))
 
             # internal config
-            # nvmem
-            if not isfile(recalboxFiles.reicastNvmemUser):
-                if not isdir(dirname(recalboxFiles.reicastNvmemUser)):
-                    os.mkdir(dirname(recalboxFiles.reicastNvmemUser))
-                copyfile(recalboxFiles.reicastNvmemBlank, recalboxFiles.reicastNvmemUser)
             # vmuA1
             if not isfile(recalboxFiles.reicastVMUA1):
                 if not isdir(dirname(recalboxFiles.reicastVMUA1)):
