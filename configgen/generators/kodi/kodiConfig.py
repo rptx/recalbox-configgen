@@ -9,6 +9,8 @@ from xml.dom import minidom
 def writeKodiConfigs(currentControllers):
     kodihatspositions    = {1: 'up', 2: 'right', 4: 'down', 8: 'left'}
     kodireversepositions = {'joystick1up': 'joystick1down', 'joystick1left': 'joystick1right', 'joystick2up': 'joystick2down', 'joystick2left': 'joystick2right' }
+    kodiaxes             = { 'joystick1up': True, 'joystick1down': True, 'joystick1left': True, 'joystick1right': True,
+                             'joystick2up': True, 'joystick2down': True, 'joystick2left': True, 'joystick2right': True }
 
     kodimapping = {
         # buttons
@@ -89,7 +91,7 @@ def writeKodiConfigs(currentControllers):
                         xmlhat.attributes["name"] = kodihatspositions[int(input.value)]
                         xmlcontroller.appendChild(xmlhat)
 
-                    elif input.type == 'axis':
+                    elif input.type == 'axis' and input.name in kodiaxes:
                         if kodimapping[input.name]["name"] not in sticksNode:
                             sticksNode[kodimapping[input.name]["name"]] = config.createElement('feature')
                             sticksNode[kodimapping[input.name]["name"]].attributes["name"] = kodimapping[input.name]["name"]
