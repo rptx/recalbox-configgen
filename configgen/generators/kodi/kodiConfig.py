@@ -18,7 +18,7 @@ def writeKodiConfigs(currentControllers):
         "hotkey": "guide", "select": "back", "start": "start",
         "pageup": "leftbumper", "l2": "lefttrigger", "pagedown": "rightbumper", "r2": "righttrigger",
 
-        # hats
+        # hats or axis
         "up": "up", "down": "down", "left": "left", "right": "right",
 
         # axes
@@ -104,6 +104,16 @@ def writeKodiConfigs(currentControllers):
                                 val =  "-" + val
                             xmlsens.attributes["axis"] = val
                             sticksNode[kodimapping[sens]["name"]].appendChild(xmlsens)
+                    elif input.type == 'axis' and input.name not in kodiaxes:
+                        xmlaxis = config.createElement('feature')
+                        val = input.id
+                        if int(input.value) >= 0:
+                            val =  "+" + val
+                        else:
+                            val =  "-" + val
+                        xmlaxis.attributes["axis"] = val
+                        xmlaxis.attributes["name"] = kodimapping[input.name]
+                        xmlcontroller.appendChild(xmlaxis)
 
         for node in sticksNode:
             xmlcontroller.appendChild(sticksNode[node])
