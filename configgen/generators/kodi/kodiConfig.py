@@ -14,7 +14,7 @@ def writeKodiConfigs(currentControllers):
 
     kodimapping = {
         # buttons
-        "a": "y", "b": "a", "x": "b", "y": "x",
+        "a": "b", "b": "a", "x": "y", "y": "x",
         "hotkey": "guide", "select": "back", "start": "start",
         "pageup": "leftbumper", "l2": "lefttrigger", "pagedown": "rightbumper", "r2": "righttrigger",
 
