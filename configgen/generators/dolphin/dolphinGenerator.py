@@ -23,7 +23,7 @@ def getDolphinLangFromEnvironment():
 
 class DolphinGenerator(Generator):
     def generate(self, system, rom, playersControllers):
-        dolphinControllers.generateControllerConfig(system, playersControllers)
+        dolphinControllers.generateControllerConfig(system, playersControllers, rom)
 
         dolphinSettings = UnixSettings(recalboxFiles.dolphinIni, separator=' ')
         #Draw or not FPS

@@ -4,11 +4,11 @@
 import recalboxFiles
 
 # Create the controller configuration file
-def generateControllerConfig(system, playersControllers):
+def generateControllerConfig(system, playersControllers, rom):
     generateHotkeys(playersControllers)
     if system.name == "wii":
         if 'emulatedwiimotes' in system.config and system.config['emulatedwiimotes'] == '1':
-            generateControllerConfig_emulatedwiimotes(playersControllers)
+            generateControllerConfig_emulatedwiimotes(playersControllers, rom)
         else:
             generateControllerConfig_realwiimotes("WiimoteNew.ini", "Wiimote")
     elif system.name == "gamecube":
@@ -16,7 +16,7 @@ def generateControllerConfig(system, playersControllers):
     else:
         raise ValueError("Invalid system name : '" + system.name + "'")
 
-def generateControllerConfig_emulatedwiimotes(playersControllers):
+def generateControllerConfig_emulatedwiimotes(playersControllers, rom):
     wiiMapping = {
         'a':      'Buttons/2',  'b':        'Buttons/A',
         'x':      'Buttons/1',  'y':        'Buttons/B',
@@ -34,7 +34,13 @@ def generateControllerConfig_emulatedwiimotes(playersControllers):
         'Swing/Up':   'Swing/Down',
         'Swing/Left': 'Swing/Right',
     }
-    generateControllerConfig_any(playersControllers, "WiimoteNew.ini", "Wiimote", wiiMapping, wiiReverseAxes)
+
+    extraOptions = {}
+    # side wiimote
+    if ".side." in rom:
+      extraOptions["Options/Sideways Wiimote"] = "1,000000"
+
+    generateControllerConfig_any(playersControllers, "WiimoteNew.ini", "Wiimote", wiiMapping, wiiReverseAxes, extraOptions)
 
 def generateControllerConfig_gamecube(playersControllers):
     gamecubeMapping = {
@@ -115,7 +121,7 @@ def generateHotkeys(playersControllers):
     f.write
     f.close()
 
-def generateControllerConfig_any(playersControllers, filename, anyDefKey, anyMapping, anyReverseAxes):
+def generateControllerConfig_any(playersControllers, filename, anyDefKey, anyMapping, anyReverseAxes, extraOptions = {}):
     configFileName = "{}/{}".format(recalboxFiles.dolphinConfig, filename)
     f = open(configFileName, "w")
     nplayer = 1
@@ -135,7 +141,8 @@ def generateControllerConfig_any(playersControllers, filename, anyDefKey, anyMap
 
         f.write("[" + anyDefKey + str(nplayer) + "]" + "\n")
         f.write("Device = evdev/" + str(nsamepad) + "/" + pad.realName + "\n")
-
+        for opt in extraOptions:
+            f.write(opt + " = " + extraOptions[opt] + "\n")
         for x in pad.inputs:
             input = pad.inputs[x]
 
