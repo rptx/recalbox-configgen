@@ -24,7 +24,7 @@ def generateControllerConfig_emulatedwiimotes(playersControllers, rom):
         'select':    'Buttons/Home',
         'up': 'D-Pad/Up', 'down': 'D-Pad/Down', 'left': 'D-Pad/Left', 'right': 'D-Pad/Right',
         'joystick1up': 'IR/Up',    'joystick1left': 'IR/Left',
-        'joystick2up': 'Swing/Up', 'joystick2left': 'Swing/Left'
+        'joystick2up': 'Tilt/Forward', 'joystick2left': 'Tilt/Left'
     }
     wiiReverseAxes = {
         'D-Pad/Up':   'D-Pad/Down',
@@ -33,9 +33,13 @@ def generateControllerConfig_emulatedwiimotes(playersControllers, rom):
         'IR/Left':    'IR/Right',
         'Swing/Up':   'Swing/Down',
         'Swing/Left': 'Swing/Right',
+        'Tilt/Left':  'Tilt/Right',
+        'Tilt/Forward': 'Tilt/Backward',
     }
 
     extraOptions = {}
+    extraOptions["Source"] = "1"
+
     # side wiimote
     if ".side." in rom:
       extraOptions["Options/Sideways Wiimote"] = "1,000000"
