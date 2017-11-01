@@ -35,6 +35,8 @@ def generateControllerConfig_emulatedwiimotes(playersControllers, rom):
         'Swing/Left': 'Swing/Right',
         'Tilt/Left':  'Tilt/Right',
         'Tilt/Forward': 'Tilt/Backward',
+        'Nunchuk/Stick/Up' :  'Nunchuk/Stick/Down',
+        'Nunchuk/Stick/Left': 'Nunchuk/Stick/Right'
     }
 
     extraOptions = {}
@@ -43,6 +45,47 @@ def generateControllerConfig_emulatedwiimotes(playersControllers, rom):
     # side wiimote
     if ".side." in rom:
       extraOptions["Options/Sideways Wiimote"] = "1,000000"
+
+    # i: infrared, s: swing, t: tilt, n: nunchuk
+    # 12 possible combinations : is si / it ti / in ni / st ts / sn ns / tn nt
+
+    # i
+    if ".is." in rom or ".it." in rom or ".in." in rom:
+        wiiMapping['joystick1up']   = 'IR/Up'
+        wiiMapping['joystick1left'] = 'IR/Left'
+    if ".si." in rom or ".ti." in rom or ".ni." in rom:
+        wiiMapping['joystick2up']   = 'IR/Up'
+        wiiMapping['joystick2left'] = 'IR/Left'
+
+    # s
+    if ".si." in rom or ".st." in rom or ".sn." in rom:
+        wiiMapping['joystick1up']   = 'Swing/Up'
+        wiiMapping['joystick1left'] = 'Swing/Left'
+    if ".is." in rom or ".ts." in rom or ".ns." in rom:
+        wiiMapping['joystick2up']   = 'Swing/Up'
+        wiiMapping['joystick2left'] = 'Swing/Left'
+
+    # t
+    if ".ti." in rom or ".ts." in rom or ".tn." in rom:
+        wiiMapping['joystick1up']   = 'Tilt/Forward'
+        wiiMapping['joystick1left'] = 'Tilt/Left'
+    if ".it." in rom or ".st." in rom or ".nt." in rom:
+        wiiMapping['joystick2up']   = 'Tilt/Forward'
+        wiiMapping['joystick2left'] = 'Tilt/Left'
+
+    # n
+    if ".ni." in rom or ".ns." in rom or ".nt." in rom:
+        extraOptions['Extension']   = 'Nunchuk'
+        wiiMapping['l2'] = 'Nunchuk/Buttons/C'
+        wiiMapping['r2'] = 'Nunchuk/Buttons/Z'
+        wiiMapping['joystick1up']   = 'Nunchuk/Stick/Up'
+        wiiMapping['joystick1left'] = 'Nunchuk/Stick/Left'
+    if ".in." in rom or ".sn." in rom or ".tn." in rom:
+        extraOptions['Extension']   = 'Nunchuk'
+        wiiMapping['l2'] = 'Nunchuk/Buttons/C'
+        wiiMapping['r2'] = 'Nunchuk/Buttons/Z'
+        wiiMapping['joystick2up']   = 'Nunchuk/Stick/Up'
+        wiiMapping['joystick2left'] = 'Nunchuk/Stick/Left'
 
     generateControllerConfig_any(playersControllers, "WiimoteNew.ini", "Wiimote", wiiMapping, wiiReverseAxes, extraOptions)
 
