@@ -18,6 +18,7 @@ from generators.dolphin.dolphinGenerator import DolphinGenerator
 from generators.scummvm.scummvmGenerator import ScummVMGenerator
 from generators.dosbox.dosboxGenerator import DosBoxGenerator
 from generators.vice.viceGenerator import ViceGenerator
+from generators.fsuae.fsuaeGenerator import FsuaeGenerator
 from generators.advancemame.advMameGenerator import AdvMameGenerator
 import controllersConfig as controllers
 import utils.runner as runner
@@ -36,6 +37,7 @@ generators = {
     'dosbox': DosBoxGenerator(),
     'mupen64plus': MupenGenerator(),
     'vice': ViceGenerator(),
+    'fsuae': FsuaeGenerator(),
     'reicast': ReicastGenerator(),
     'dolphin': DolphinGenerator(),
     'ppsspp': PPSSPPGenerator(),
@@ -75,7 +77,17 @@ emulators["advancemame"] = Emulator(name='advancemame', emulator='advmame')
 emulators["msx"] = Emulator(name='msx', emulator='libretro', core='bluemsx')
 emulators["msx1"] = Emulator(name='msx1', emulator='libretro', core='bluemsx')
 emulators["msx2"] = Emulator(name='msx2', emulator='libretro', core='bluemsx')
-emulators["amiga"] = Emulator(name='amiga', emulator='libretro', core='puae')
+
+emulators["amiga500"]  = Emulator(name='amiga500',  emulator='fsuae', core='A500')
+emulators["amiga500p"] = Emulator(name='amiga500p', emulator='fsuae', core='A500+')
+emulators["amiga600"]  = Emulator(name='amiga600',  emulator='fsuae', core='A600')
+emulators["amiga1000"] = Emulator(name='amiga1000', emulator='fsuae', core='A1000')
+emulators["amiga1200"] = Emulator(name='amiga1200', emulator='fsuae', core='A1200')
+emulators["amiga3000"] = Emulator(name='amiga3000', emulator='fsuae', core='A3000')
+emulators["amiga4000"] = Emulator(name='amiga4000', emulator='fsuae', core='A4000')
+emulators["amigacd32"] = Emulator(name='amigacd32', emulator='fsuae', core='CD32')
+emulators["amigacdtv"] = Emulator(name='amigacdtv', emulator='fsuae', core='CDTV')
+
 emulators["amstradcpc"] = Emulator(name='amstradcpc', emulator='libretro', core='cap32')
 emulators["apple2"] = Emulator(name='apple2', emulator='linapple', videomode='default')
 emulators["atarist"] = Emulator(name='atarist', emulator='libretro', core='hatari')

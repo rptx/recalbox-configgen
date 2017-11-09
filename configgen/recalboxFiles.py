@@ -25,6 +25,7 @@ recalboxBins = {'dosbox'      : '/usr/bin/dosbox'
               , 'reicast'     : '/usr/bin/reicast.elf'
               , 'scummvm'     : '/usr/bin/scummvm'
               , 'vice'        : '/usr/bin/x64'
+              , 'fsuae'       : '/usr/bin/fs-uae'
               , 'dolphin'     : '/usr/bin/dolphin-emu'
               , 'advancemame' : '/usr/bin/advmame'
 }
@@ -90,6 +91,10 @@ ppssppConfig = ppssppConf + '/ppsspp.ini'
 
 dosboxCustom = CONF + '/dosbox'
 dosboxConfig = dosboxCustom + '/dosbox.conf'
+
+fsuaeBios = BIOS
+fsuaeConfig = CONF + "/FS-UAE"
+fsuaeSaves = SAVES + "/amiga"
 
 scummvmSaves = SAVES + '/scummvm'
 
