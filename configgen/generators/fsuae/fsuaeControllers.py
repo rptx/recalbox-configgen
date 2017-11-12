@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import recalboxFiles
+import os.path
 
 # Create the controller configuration file
 def generateControllerConfig(system, playersControllers):
@@ -23,6 +24,11 @@ def generateControllerConfig(system, playersControllers):
     fsuaeHatMapping = { "1": "up", "4": "down", "2": "right", "8": "left" }
     fsuaeReverseAxisMapping = { 'joystick1up': 'joystick1down', 'joystick1left': 'joystick1right',
                                 'joystick2up': 'joystick2down', 'joystick2left': 'joystick2right',}
+
+    # create the directory for the first time
+    confDirectory = recalboxFiles.fsuaeConfig + "/Controllers"
+    if not os.path.exists(confDirectory):
+        os.makedirs(confDirectory)
 
     for playercontroller in playersControllers:
         pad = playersControllers[playercontroller]
