@@ -56,12 +56,13 @@ def generateControllerConfig(system, playersControllers):
                     if input.value in fsuaeHatMapping:
                         f.write("hat_" + str(input.id) + "_" + fsuaeHatMapping[input.value] + " = " + fsuaeMapping[input.name] + "\n")
                 elif input.type == "axis":
-                    if input.value == 1:
+                    if input.value == "1":
                         axis_valstr = "pos"
                         revaxis_valstr = "neg"
                     else:
                         axis_valstr = "neg"
                         revaxis_valstr = "pos"
                     f.write("axis_" + str(input.id) + "_" +    axis_valstr + " = " + fsuaeMapping[input.name] + "\n")
-                    f.write("axis_" + str(input.id) + "_" + revaxis_valstr + " = " + fsuaeMapping[fsuaeReverseAxisMapping[input.name]] + "\n")
+                    if input.name in fsuaeReverseAxisMapping and fsuaeReverseAxisMapping[input.name] in fsuaeMapping:
+                        f.write("axis_" + str(input.id) + "_" + revaxis_valstr + " = " + fsuaeMapping[fsuaeReverseAxisMapping[input.name]] + "\n")
         f.close()
