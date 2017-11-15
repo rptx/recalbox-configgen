@@ -153,16 +153,16 @@ def findBestControllerConfig(controllers, x, pxguid, pxindex, pxname, pxdev, pxn
     for controllerGUID in controllers:
         controller = controllers[controllerGUID]
         if controller.guid == pxguid and controller.configName == pxname:
-            return Controller(controller.configName, controller.type, controller.guid, x, pxindex, pxname,
+            return Controller(controller.configName, controller.type, pxguid, x, pxindex, pxname,
                               controller.inputs, pxdev, pxnbaxes)
     for controllerGUID in controllers:
         controller = controllers[controllerGUID]
         if controller.guid == pxguid:
-            return Controller(controller.configName, controller.type, controller.guid, x, pxindex, pxname,
+            return Controller(controller.configName, controller.type, pxguid, x, pxindex, pxname,
                               controller.inputs, pxdev, pxnbaxes)
     for controllerGUID in controllers:
         controller = controllers[controllerGUID]
         if controller.configName == pxname:
-            return Controller(controller.configName, controller.type, controller.guid, x, pxindex, pxname,
+            return Controller(controller.configName, controller.type, pxguid, x, pxindex, pxname,
                               controller.inputs, pxdev, pxnbaxes)
     return None
