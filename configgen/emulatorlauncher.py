@@ -108,6 +108,7 @@ emulators["wswanc"] = Emulator(name='wswanc', emulator='libretro', core='mednafe
 emulators["pcengine"] = Emulator(name='pcengine', emulator='libretro', core='mednafen_supergrafx')
 emulators["pcenginecd"] = Emulator(name='pcenginecd', emulator='libretro', core='mednafen_supergrafx')
 emulators["supergrafx"] = Emulator(name='supergrafx', emulator='libretro', core='mednafen_supergrafx')
+emulators["pcfx"] = Emulator(name='pcfx', emulator='libretro', core='pcfx')
 emulators["atari2600"] = Emulator(name='atari2600', emulator='libretro', core='stella')
 emulators["atari7800"] = Emulator(name='atari7800', emulator='libretro', core='prosystem')
 emulators["prboom"] = Emulator(name='prboom', emulator='libretro', core='prboom')
